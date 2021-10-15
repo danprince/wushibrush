@@ -122,7 +122,8 @@ export function useTool({
 }) {
   let [tool, setTool] = useReducer(
     ((prevTool: Tool, newTool: Tool) => newTool),
-    defaultTool,
+    // @ts-ignore
+    () => defaultTool,
   );
 
   let getState = useGetter(state);

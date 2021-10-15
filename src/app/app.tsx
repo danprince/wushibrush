@@ -151,6 +151,7 @@ export function App() {
             </a>
             <ToolbarButton
               onClick={save}
+              disabled={!Editor.canSave(state)}
               title="Download"
             >
               <Icons.Download/>

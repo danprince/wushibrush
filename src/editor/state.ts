@@ -152,6 +152,10 @@ export function getActiveCommits(state: State): Commit[] {
   }
 }
 
+export function canSave(state: State) {
+  return getActiveCommits(state).length > 0;
+}
+
 export function save(state: State) {
   return state;
 }

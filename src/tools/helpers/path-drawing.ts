@@ -1,5 +1,5 @@
 import { Point } from "../../editor";
-import { Renderer } from "../../renderer/renderer";
+import { Renderer } from "../../renderer";
 
 export class PathDrawingTool {
   private _points: Point[] = [];

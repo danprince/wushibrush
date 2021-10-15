@@ -1,3 +1,4 @@
+export * from "./tool";
 export * from "./brush";
 export * from "./eraser";
 export * from "./rect";

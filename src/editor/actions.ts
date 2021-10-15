@@ -1,5 +1,5 @@
 import { Action, State, Commit, Settings, Update, Point } from "./state";
-import { pointsToPerfectPath, pointsToSimplePath } from "../utils";
+import { pointsToPerfectPath, pointsToSimplePath } from "./paths";
 
 function uid() {
   let buffer = new Uint32Array(1);
@@ -17,8 +17,8 @@ export function commit(update: Update): Action {
   return { type: "commit", commit };
 }
 
-export function load(commits: Commit[]): Action {
-  return { type: "load", commits };
+export function load(state: State): Action {
+  return { type: "load", state };
 }
 
 export function undo(): Action {

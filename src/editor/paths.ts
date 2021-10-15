@@ -1,18 +1,5 @@
-import { useRef, useEffect, useCallback } from "preact/hooks";
 import { getStroke } from "perfect-freehand";
 import { Point } from "./editor";
-
-export function useGetter<T>(value: T) {
-  let ref = useRef(value);
-
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-
-  return useCallback(() => {
-    return ref.current;
-  }, []);
-}
 
 export function pointsToPerfectPath(points: Point[], size: number) {
   if (points.length === 0) {
@@ -24,6 +11,10 @@ export function pointsToPerfectPath(points: Point[], size: number) {
     size,
   });
 
+  if (stroke.length === 0) {
+    return "";
+  }
+
   let [startX, startY] = stroke[0];
   let cmds = ["M", startX, startY, "Q"];
 
@@ -32,7 +23,13 @@ export function pointsToPerfectPath(points: Point[], size: number) {
     let [x1, y1] = stroke[(i + 1) % stroke.length];
     let cpx = (x0 + x1) / 2;
     let cpy = (y0 + y1) / 2;
-    cmds.push(x0, y0, cpx, cpy);
+
+    cmds.push(
+      x0.toFixed(2),
+      y0.toFixed(2),
+      cpx.toFixed(2),
+      cpy.toFixed(2),
+    );
   }
 
   cmds.push("Z");
@@ -41,15 +38,11 @@ export function pointsToPerfectPath(points: Point[], size: number) {
 }
 
 export function pointsToSimplePath(points: Point[]) {
-  return pointsToBezierPath(
-    simplifyPoints(points)
-  );
-}
-
-export function pointsToBezierPath(points: Point[]) {
   if (points.length === 0) {
     return "";
   }
+
+  points = simplifyPoints(points);
 
   let start = points[0];
   let end = points[points.length - 1];
@@ -72,7 +65,7 @@ export function pointsToBezierPath(points: Point[]) {
   return cmds.join(" ");
 }
 
-export function simplifyPoints(points: Point[], minDistance = 5): Point[] {
+export function simplifyPoints(points: Point[], minDistance = 1): Point[] {
   if (points.length === 0) {
     return [];
   }

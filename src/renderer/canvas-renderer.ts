@@ -1,4 +1,4 @@
-import { Renderer } from "./renderer";
+import { Renderer } from ".";
 import { Point, Update } from "../editor";
 
 export class CanvasRenderer implements Renderer {
@@ -194,5 +194,16 @@ export class CanvasRenderer implements Renderer {
     ctx.stroke();
     ctx.fill();
     ctx.restore();
+  }
+
+  toFile() {
+    return new Promise<File>(resolve => {
+      let blob = this.canvas.toBlob(blob => {
+        let file = new File([blob!], "download.png", {
+          type: "image/png",
+        });
+        resolve(file);
+      });
+    });
   }
 }

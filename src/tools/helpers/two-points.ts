@@ -1,5 +1,5 @@
 import { Point } from "../../editor";
-import { Renderer } from "../../renderer/renderer";
+import { Renderer } from "../../renderer";
 
 export class TwoPointsTool {
   private start: Point | null = null;
@@ -38,6 +38,7 @@ export class TwoPointsTool {
     if (this.start) {
       this.end = this.renderer.clientToCanvas(event.clientX, event.clientY);
       this.onCreate();
+      this.start = this.end = null;
     }
   }
 

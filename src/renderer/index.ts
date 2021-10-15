@@ -4,7 +4,7 @@ export interface Renderer {
   width: number;
   height: number;
   readonly container: HTMLElement | SVGElement;
-  mount(element: HTMLElement): void;
+  mount(element: HTMLElement | null): void;
   unmount(): void;
   clientToCanvas(clientX: number, clientY: number): Point;
   clear(): void;
@@ -15,5 +15,6 @@ export interface Renderer {
   setCursorSize(size: number): void;
   setCursorPosition(x: number, y: number): void;
   sampleAt(x: number, y: number): string | null;
+  toFile(): Promise<File>;
 }
 

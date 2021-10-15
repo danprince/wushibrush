@@ -1,0 +1,28 @@
+:root {
+  --shadow: 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url(/background.svg);
+}
+
+body {
+  background: #5551fd;
+  margin: 0;
+}
+
+.renderer {
+  border-radius: 8px;
+  background: white;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+

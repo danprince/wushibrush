@@ -1,0 +1,20 @@
+.opacity-slider {
+  display: flex;
+  flex-direction: row;
+}
+
+.opacity-slider-low,
+.opacity-slider-high {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: black;
+  border: solid 2px black;
+  box-shadow: inset 0 0 0 4px white;
+  background: black;
+  box-sizing: border-box;
+}
+
+.opacity-slider-low {
+  opacity: 0.25;
+}

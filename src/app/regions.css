@@ -1,0 +1,41 @@
+.region {
+  position: fixed;
+  pointer-events: none;
+  padding: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.region > * {
+  pointer-events: auto;
+}
+
+.region-left {
+  left: 0;
+  top: 0;
+  bottom: 0;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.region-right {
+  right: 0;
+  top: 0;
+  bottom: 0;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.region-top {
+  top: 0;
+  left: 100px;
+  right: 100px;
+  justify-content: center;
+}
+
+.region-bottom {
+  bottom: 0;
+  left: 100px;
+  right: 100px;
+  justify-content: center;
+}

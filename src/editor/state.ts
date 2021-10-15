@@ -46,7 +46,7 @@ export type Action =
   | { type: "undo" }
   | { type: "redo" }
   | { type: "commit", commit: Commit }
-  | { type: "load", commits: Commit[] }
+  | { type: "load", state: State }
   | { type: "settings", settings: Partial<Settings> }
   | { type: "resize", width: number, height: number }
   | { type: "event", event: Event }
@@ -95,7 +95,7 @@ export function reducer(state: State, action: Action): State {
     }
 
     case "load": {
-      return { ...state, commits: action.commits, head: 0 };
+      return { ...state, ...action.state };
     }
 
     case "resize": {
@@ -150,5 +150,9 @@ export function getActiveCommits(state: State): Commit[] {
   } else {
     return state.commits;
   }
+}
+
+export function save(state: State) {
+  return state;
 }
 

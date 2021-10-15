@@ -1,0 +1,22 @@
+.toolbar {
+  width: 74px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.toolbar-button {
+  border: 0;
+  background: transparent;
+  width: 32px;
+  height: 32px;
+  color: black;
+}
+
+.toolbar-button-inactive {
+  opacity: 0.6;
+}
+
+.toolbar-button:disabled {
+  opacity: 0.3;
+}

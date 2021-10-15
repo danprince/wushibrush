@@ -1,6 +1,6 @@
 import { Point, setColor } from "../editor";
 import { Tool } from "./tool";
-import { Renderer } from "../renderer/renderer";
+import { Renderer } from "../renderer";
 
 export const eyedropper: Tool = ({ renderer, getState, dispatch }) => {
   const onPointerDown = (event: PointerEvent) => {

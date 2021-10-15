@@ -1,4 +1,4 @@
-import { Renderer } from "./renderer";
+import { Renderer } from ".";
 import { Point, Update } from "../editor";
 
 /**
@@ -29,11 +29,15 @@ export class SvgRenderer implements Renderer {
     this.container.style.cursor = "none";
   }
 
-  mount(element: HTMLElement) {
-    element.append(this.container);
+  mount = (element: HTMLElement | null) => {
+    if (element) {
+      element.append(this.container);
+    } else {
+      this.unmount();
+    }
   }
 
-  unmount() {
+  unmount = () => {
     this.container.remove();
   }
 
@@ -42,6 +46,8 @@ export class SvgRenderer implements Renderer {
   }
 
   resize(width: number, height: number) {
+    this.width = width;
+    this.height = height;
     this.container.setAttribute("width", `${width}`);
     this.container.setAttribute("height", `${height}`);
   }
@@ -156,6 +162,25 @@ export class SvgRenderer implements Renderer {
     } else {
       return null;
     }
+  }
+
+  async toFile() {
+    console.log(this.width, this.height);
+
+    let root = svg("svg", {
+      width: this.width,
+      height: this.height,
+      xmlns: "http://www.w3.org/2000/svg",
+      viewBox: `0 0 ${this.width} ${this.height}`,
+    });
+
+    root.innerHTML = this.viewGroup.innerHTML;
+
+    let body = root.outerHTML;
+
+    return new File([body], "download.svg", {
+      type: "image/svg+xml",
+    });
   }
 }
 

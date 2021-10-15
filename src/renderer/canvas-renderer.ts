@@ -133,15 +133,11 @@ export class CanvasRenderer implements Renderer {
     ctx.restore();
   }
 
-  sampleAt(x: number, y: number) {
+  sampleAt(x: number, y: number): [string, number] {
     let imageData = this.ctx.getImageData(x, y, 1, 1);
     let [r, g, b, a] = imageData.data;
-
-    if (a > 0) {
-      return `rgb(${r}, ${g}, ${b})`;
-    } else {
-      return null;
-    }
+    let color =  `rgb(${r}, ${g}, ${b})`;
+    return [color, a];
   }
 
   setCursorSize(size: number) {

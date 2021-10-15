@@ -14,7 +14,7 @@ export interface Renderer {
   preview(update: Update): void;
   setCursorSize(size: number): void;
   setCursorPosition(x: number, y: number): void;
-  sampleAt(x: number, y: number): string | null;
+  sampleAt(x: number, y: number): [color: string, alpha: number] | null;
   toFile(): Promise<File>;
 }
 

@@ -141,18 +141,27 @@ export class SvgRenderer implements Renderer {
   }
 
   sampleAt(x: number, y: number) {
-    let rect = this.container.getBoundingClientRect();
-
     // Make point relative to root
+    let rect = this.container.getBoundingClientRect();
     let clientX = rect.x + x;
     let clientY = rect.y + y;
     let element = document.elementFromPoint(clientX, clientY);
 
-    if (element instanceof SVGElement) {
-      return element.getAttribute("fill");
-    } else {
+    if (!(element instanceof SVGElement)) {
       return null;
     }
+
+    let color = element.getAttribute("fill");
+    let alpha = element.getAttribute("opacity");
+
+    if (color && alpha) {
+      let opacity = parseFloat(alpha);
+      return [color, opacity] as [string, number];
+    } else if (color) {
+      return [color, 1] as [string, number];
+    }
+
+    return null;
   }
 
   async toFile() {

@@ -1,5 +1,5 @@
 import { getStroke } from "perfect-freehand";
-import { Point } from "./editor";
+import { Point } from "./state";
 
 export function pointsToPerfectPath(points: Point[], size: number) {
   if (points.length === 0) {

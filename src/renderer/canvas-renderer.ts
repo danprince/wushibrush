@@ -96,11 +96,6 @@ export class CanvasRenderer implements Renderer {
     ctx.save();
 
     switch (update.type) {
-      case "clear": {
-        ctx.clearRect(0, 0, this.width, this.height);
-        break;
-      };
-
       case "path": {
         ctx.globalAlpha = update.opacity;
 

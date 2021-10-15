@@ -1,7 +1,7 @@
 import "./toolbar.css";
-import { VNode } from "preact";
+import { ComponentChildren } from "preact";
 
-export function Toolbar({ children }: { children: VNode }) {
+export function Toolbar({ children }: { children: ComponentChildren }) {
   return (
     <div className="toolbar">
       {children}

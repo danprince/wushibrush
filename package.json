@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "perfect-freehand": "^1.0.15",
-    "polygon-clipping": "^0.15.3",
     "preact": "^10.5.13"
   },
   "devDependencies": {

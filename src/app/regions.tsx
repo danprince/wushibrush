@@ -1,7 +1,7 @@
 import "./regions.css";
 import { VNode } from "preact"
 
-type Props = { children: VNode };
+type Props = { children: VNode | VNode[] };
 
 export const Left = (props: Props) => (
   <div className="region region-left" {...props} />

@@ -4,6 +4,7 @@ import * as Tools from "../tools";
 import * as Shortcuts from "../shortcuts";
 import * as Icons from "./icons";
 import * as Regions from "./regions";
+import { VNode } from "preact";
 import { useReducer, useMemo, useEffect } from "preact/hooks";
 import { SvgRenderer } from "../renderer/svg-renderer";
 import { useEditor, useTool } from "../hooks";
@@ -26,37 +27,37 @@ const tools: ToolOption[] = [
     label: "Brush",
     shortcut: "b",
     icon: <Icons.Brush />,
-    tool: Tools.brush,
+    handler: Tools.brush,
   },
   {
     label: "Eraser",
     shortcut: "e",
     icon: <Icons.Eraser />,
-    tool: Tools.eraser,
+    handler: Tools.eraser,
   },
   {
     label: "Rectangle",
     shortcut: "r",
     icon: <Icons.Rect />,
-    tool: Tools.rect,
+    handler: Tools.rect,
   },
   {
     label: "Circle",
     shortcut: "c",
     icon: <Icons.Circle />,
-    tool: Tools.circle,
+    handler: Tools.circle,
   },
   {
     label: "Line",
     shortcut: "l",
     icon: <Icons.Line />,
-    tool: Tools.line,
+    handler: Tools.line,
   },
   {
     label: "Eyedropper",
     shortcut: "i",
     icon: <Icons.Eyedropper />,
-    tool: Tools.eyedropper,
+    handler: Tools.eyedropper,
   },
 ];
 
@@ -83,7 +84,7 @@ export function App() {
     let toolShortcuts: Shortcuts.Bindings = {};
 
     for (let tool of tools) {
-      toolShortcuts[tool.shortcut] = () => setTool(tool.tool);
+      toolShortcuts[tool.shortcut] = () => setTool(tool.handler);
     }
 
     return Shortcuts.on({
@@ -117,8 +118,8 @@ export function App() {
             {tools.map(tool => {
               return (
                 <ToolbarButton
-                  active={activeTool === tool.tool}
-                  onClick={() => setTool(tool.tool)}
+                  active={activeTool === tool.handler}
+                  onClick={() => setTool(tool.handler)}
                   title={tool.label}
                 >
                   {tool.icon}

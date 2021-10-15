@@ -70,17 +70,8 @@ export class SvgRenderer implements Renderer {
     this.apply(this.previewGroup, update);
   }
 
-  clearPreview() {
-    this.previewGroup.innerHTML = "";
-  }
-
   private apply(element: SVGElement, update: Update) {
     switch (update.type) {
-      case "clear": {
-        element.innerHTML = "";
-        break;
-      };
-
       case "path": {
         if ("fillColor" in update) {
           element.append(

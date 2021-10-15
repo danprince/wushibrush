@@ -9,7 +9,7 @@ export function BrushSelector({
   activeSize,
   setSize
 }: {
-  sizes: number[],
+  sizes?: number[],
   activeSize: number,
   setSize(size: number): void,
 }) {

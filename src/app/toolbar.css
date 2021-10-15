@@ -11,10 +11,20 @@
   width: 32px;
   height: 32px;
   color: black;
+  padding: 0;
+  border-radius: 4px;
+}
+
+.toolbar-button:hover {
+  background: #eeedfe;
+}
+
+.toolbar-button-active {
+  color: var(--theme-color);
+  background: #eeedfe;
 }
 
 .toolbar-button-inactive {
-  opacity: 0.6;
 }
 
 .toolbar-button:disabled {

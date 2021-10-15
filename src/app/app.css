@@ -1,5 +1,6 @@
 :root {
   --shadow: 4px 4px rgba(0, 0, 0, 0.1);
+  --theme-color: #5551fd;
 }
 
 .app {
@@ -15,7 +16,7 @@
 }
 
 body {
-  background: #5551fd;
+  background: var(--theme-color);
   margin: 0;
   /* Disable pull-to-refresh */
   overscroll-behaviour: contain;

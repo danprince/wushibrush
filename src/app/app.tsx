@@ -146,7 +146,7 @@ export function App() {
             </ToolbarButton>
             <a href="https://github.com/danprince/wushibrush" target="_blank">
               <ToolbarButton title="GitHub">
-                <Icons.GitHub />
+                <Icons.GitHub width={18} />
               </ToolbarButton>
             </a>
             <ToolbarButton

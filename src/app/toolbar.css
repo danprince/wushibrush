@@ -21,7 +21,6 @@
 
 .toolbar-button-active {
   color: var(--theme-color);
-  background: #eeedfe;
 }
 
 .toolbar-button-inactive {

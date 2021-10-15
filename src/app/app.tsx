@@ -144,7 +144,7 @@ export function App() {
             >
               <Icons.Redo/>
             </ToolbarButton>
-            <a href="https://github.com/danprince/wushi" target="_blank">
+            <a href="https://github.com/danprince/wushibrush" target="_blank">
               <ToolbarButton title="GitHub">
                 <Icons.GitHub />
               </ToolbarButton>

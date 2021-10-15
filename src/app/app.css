@@ -17,6 +17,8 @@
 body {
   background: #5551fd;
   margin: 0;
+  /* Disable pull-to-refresh */
+  overscroll-behaviour: contain;
 }
 
 .renderer {
@@ -24,5 +26,6 @@ body {
   background: white;
   box-shadow: var(--shadow);
   overflow: hidden;
+  touch-action: none;
 }
 

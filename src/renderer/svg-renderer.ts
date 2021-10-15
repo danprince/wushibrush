@@ -9,11 +9,11 @@ export class SvgRenderer implements Renderer {
   width: number;
   height: number;
 
-  readonly container = svg("svg");
-  private viewGroup = svg("g", { class: "view" });
-  private previewGroup = svg("g", { class: "preview" });
+  readonly container = h("svg");
+  private viewGroup = h("g", { class: "view" });
+  private previewGroup = h("g", { class: "preview" });
 
-  private cursor = svg("g", {
+  private cursor = h("g", {
     class: "cursor",
     display: "none",
   });
@@ -75,7 +75,7 @@ export class SvgRenderer implements Renderer {
       case "path": {
         if ("fillColor" in update) {
           element.append(
-            svg("path", {
+            h("path", {
               "d": update.path,
               "opacity": update.opacity,
               "fill": update.fillColor,
@@ -83,7 +83,7 @@ export class SvgRenderer implements Renderer {
           );
         } else {
           element.append(
-            svg("path", {
+            h("path", {
               "d": update.path,
               "opacity": update.opacity,
               "fill": "none",
@@ -100,7 +100,7 @@ export class SvgRenderer implements Renderer {
 
       case "erase": {
         element.append(
-          svg("path", {
+          h("path", {
             d: update.path,
             fill: "white", // TODO
           })
@@ -110,7 +110,7 @@ export class SvgRenderer implements Renderer {
 
       case "circle": {
         element.append(
-          svg("circle", {
+          h("circle", {
             "cx": update.x,
             "cy": update.y,
             "r": update.r,
@@ -156,9 +156,7 @@ export class SvgRenderer implements Renderer {
   }
 
   async toFile() {
-    console.log(this.width, this.height);
-
-    let root = svg("svg", {
+    let root = h("svg", {
       width: this.width,
       height: this.height,
       xmlns: "http://www.w3.org/2000/svg",
@@ -175,7 +173,7 @@ export class SvgRenderer implements Renderer {
   }
 }
 
-function svg(tag: string, attrs: { [key: string]: string | number } = {}) {
+function h(tag: string, attrs: { [key: string]: string | number } = {}) {
   let element = document.createElementNS("http://www.w3.org/2000/svg", tag);
 
   for (let key in attrs) {
@@ -191,12 +189,12 @@ function createCursor(size: number) {
   let len = 6;
 
   let circle = (r: number, stroke: string) =>
-    svg("circle", { r, fill: "none", stroke });
+    h("circle", { r, fill: "none", stroke });
 
-  let rect = (x: number, y: number, w: number, h: number) =>
-    svg("rect", { x, y, width: w, height: h, fill: "black", stroke: "white" });
+  let rect = (x: number, y: number, width: number, height: number) =>
+    h("rect", { x, y, width, height, fill: "black", stroke: "white" });
 
-  let g = svg("g");
+  let g = h("g");
 
   g.append(
     circle(r, "black"),

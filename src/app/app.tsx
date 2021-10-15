@@ -90,6 +90,10 @@ export function App() {
     return Shortcuts.on({
       "ctrl+shift+z": redo,
       "ctrl+z": undo,
+      "ctrl+s": event => {
+        event.preventDefault();
+        save();
+      },
       ...toolShortcuts,
     });
   }, []);

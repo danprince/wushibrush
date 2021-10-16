@@ -49,25 +49,13 @@ export function Help() {
               <kbd>{Shortcut.Redo}</kbd> Redo
             </li>
             <li>
+              <kbd>{Shortcut.BrushSize1}</kbd> to <kbd>{Shortcut.BrushSize5}</kbd> Brush Size
+            </li>
+            <li>
               <kbd>{Shortcut.ToggleQuietMode}</kbd> Quiet Mode
             </li>
             <li>
               <kbd>{Shortcut.ShowHelp}</kbd> Help
-            </li>
-            <li>
-              <kbd>{Shortcut.BrushSize1}</kbd> Use Brush 1
-            </li>
-            <li>
-              <kbd>{Shortcut.BrushSize2}</kbd> Use Brush 2
-            </li>
-            <li>
-              <kbd>{Shortcut.BrushSize3}</kbd> Use Brush 3
-            </li>
-            <li>
-              <kbd>{Shortcut.BrushSize4}</kbd> Use Brush 4
-            </li>
-            <li>
-              <kbd>{Shortcut.BrushSize5}</kbd> Use Brush 5
             </li>
           </ul>
         </div>

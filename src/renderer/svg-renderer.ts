@@ -73,27 +73,17 @@ export class SvgRenderer implements Renderer {
   private apply(element: SVGElement, update: Update) {
     switch (update.type) {
       case "path": {
-        if ("fillColor" in update) {
-          element.append(
-            h("path", {
-              "d": update.path,
-              "opacity": update.opacity,
-              "fill": update.fillColor,
-            })
-          );
-        } else {
-          element.append(
-            h("path", {
-              "d": update.path,
-              "opacity": update.opacity,
-              "fill": "none",
-              "stroke": update.strokeColor,
-              "stroke-width": update.strokeWidth,
-              "stroke-linecap": "round",
-              "stroke-linejoin": "round",
-            })
-          );
-        }
+        element.append(
+          h("path", {
+            "d": update.path,
+            "opacity": update.opacity,
+            "stroke-linecap": "round",
+            "stroke-linejoin": "round",
+            "fill": "fillColor" in update ? update.fillColor : "none",
+            "stroke": "strokeColor" in update ? update.strokeColor : "none",
+            "stroke-width": "strokeWidth" in update ? update.strokeWidth : 0,
+          })
+        );
 
         break;
       }
@@ -115,9 +105,9 @@ export class SvgRenderer implements Renderer {
             "cy": update.y,
             "r": update.r,
             "opacity": update.opacity.toString(),
-            "stroke": update.strokeColor,
-            "fill": "none",
-            "stroke-width": update.strokeWidth,
+            "fill": "fillColor" in update ? update.fillColor : "none",
+            "stroke": "strokeColor" in update ? update.strokeColor : "none",
+            "stroke-width": "strokeWidth" in update ? update.strokeWidth : 0,
           })
         );
 

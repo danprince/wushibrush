@@ -41,8 +41,12 @@ export class CanvasRenderer implements Renderer {
     }
   }
 
-  mount(element: HTMLElement) {
-    element.append(this.container);
+  mount = (element: HTMLElement | null) => {
+    if (element) {
+      element.append(this.container);
+    } else {
+      this.unmount();
+    }
   }
 
   unmount() {
@@ -84,6 +88,7 @@ export class CanvasRenderer implements Renderer {
   }
 
   preview(update: Update) {
+    this.clearPreview();
     this.apply(this.previewCtx, update);
   }
 
@@ -187,14 +192,16 @@ export class CanvasRenderer implements Renderer {
     ctx.restore();
   }
 
-  toFile() {
-    return new Promise<File>(resolve => {
-      let blob = this.canvas.toBlob(blob => {
-        let file = new File([blob!], "download.png", {
-          type: "image/png",
-        });
-        resolve(file);
-      });
+  async toFile(name: string) {
+    let blob = await this.toBlob();
+    return new File([blob], `${name}.png`, {
+      type: "image/png",
+    });
+  }
+
+  toBlob() {
+    return new Promise<Blob>(resolve => {
+      return this.canvas.toBlob(blob => resolve(blob!));
     });
   }
 }

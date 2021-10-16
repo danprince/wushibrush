@@ -1,6 +1,13 @@
 import { Point } from "../../editor";
 import { Renderer } from "../../renderer";
 
+/**
+ * Helper for building tools that revolve around two points. Useful for lines,
+ * circles, rectangles, etc.
+ *
+ * - onPreview is called when either of the points is moved
+ * - onCreate is called when the end point is released
+ */
 export class TwoPointsTool {
   private start: Point | null = null;
   private end: Point | null = null;
@@ -24,7 +31,7 @@ export class TwoPointsTool {
   }
 
   getPoints() {
-    return [this.start!, this.end!];
+    return [this.start, this.end];
   }
 
   private onPointerDown = (event: PointerEvent) => {

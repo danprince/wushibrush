@@ -1,5 +1,5 @@
 .toolbar {
-  width: 74px;
+  width: 72px;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -10,22 +10,23 @@
   background: transparent;
   width: 32px;
   height: 32px;
-  color: black;
+  color: var(--button-color);
   padding: 0;
   border-radius: 4px;
 }
 
-.toolbar-button:hover {
-  background: #eeedfe;
+@media (hover: hover) {
+  .toolbar-button:hover:not(:disabled) {
+    background: var(--button-hover-background);
+  }
 }
 
 .toolbar-button-active {
-  color: var(--theme-color);
-}
-
-.toolbar-button-inactive {
+  background: white !important;
+  color: var(--theme-color)
 }
 
 .toolbar-button:disabled {
   opacity: 0.3;
 }
+

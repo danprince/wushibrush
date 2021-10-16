@@ -1,4 +1,4 @@
-import { Point, setColor, setOpacity } from "../editor";
+import { Point, setColor, setOpacity, setPenSize } from "../editor";
 import { Tool } from "./tool";
 import { Renderer } from "../renderer";
 
@@ -20,9 +20,13 @@ export const eyedropper: Tool = ({ renderer, getState, dispatch }) => {
     }
   };
 
+  let prevPenSize = getState().settings.size;
+  dispatch(setPenSize(3));
+
   window.addEventListener("pointerdown", onPointerDown);
 
   return () => {
+    dispatch(setPenSize(prevPenSize));
     window.removeEventListener("pointerdown", onPointerDown);
   };
 }

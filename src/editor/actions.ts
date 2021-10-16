@@ -49,23 +49,34 @@ export function setOpacity(opacity: number): Action {
   return { type: "settings", settings: { opacity } };
 }
 
-export function createPath(state: State, points: Point[], perfect = true): Update {
-  if (perfect) {
-    return {
-      type: "path",
-      path: pointsToPerfectPath(points, state.settings.size),
-      fillColor: state.settings.color,
-      opacity: state.settings.opacity,
-    };
-  } else {
-    return {
-      type: "path",
-      path: pointsToSimplePath(points),
-      strokeWidth: state.settings.size,
-      strokeColor: state.settings.color,
-      opacity: state.settings.opacity,
-    };
-  }
+export function createSimplePath(state: State, points: Point[]): Update {
+  return {
+    type: "path",
+    path: pointsToSimplePath(points),
+    strokeWidth: state.settings.size,
+    strokeColor: state.settings.color,
+    opacity: state.settings.opacity,
+  };
+}
+
+export function createFreehandPath(state: State, points: Point[]): Update {
+  return {
+    type: "path",
+    path: pointsToPerfectPath(points, state.settings.size),
+    fillColor: state.settings.color,
+    opacity: state.settings.opacity,
+  };
+}
+
+export function fillPath(state: State, points: Point[]): Update {
+  return {
+    type: "path",
+    path: pointsToSimplePath(points),
+    fillColor: state.settings.color,
+    strokeColor: state.settings.color,
+    strokeWidth: state.settings.size,
+    opacity: state.settings.opacity,
+  };
 }
 
 export function createErase(state: State, points: Point[]): Update {
@@ -76,7 +87,7 @@ export function createErase(state: State, points: Point[]): Update {
   };
 }
 
-export function createRect(state: State, x: number, y: number, w: number, h: number): Update {
+export function strokeRect(state: State, x: number, y: number, w: number, h: number): Update {
   return {
     type: "path",
     path: `M ${x} ${y} h ${w} v ${h} h ${-w} Z`,
@@ -86,10 +97,32 @@ export function createRect(state: State, x: number, y: number, w: number, h: num
   };
 }
 
-export function createCircle(state: State, x: number, y: number, r: number): Update {
+export function fillRect(state: State, x: number, y: number, w: number, h: number): Update {
+  return {
+    type: "path",
+    path: `M ${x} ${y} h ${w} v ${h} h ${-w} Z`,
+    fillColor: state.settings.color,
+    strokeColor: state.settings.color,
+    strokeWidth: state.settings.size,
+    opacity: state.settings.opacity,
+  };
+}
+
+export function strokeCircle(state: State, x: number, y: number, r: number): Update {
   return {
     type: "circle",
     x, y, r,
+    strokeColor: state.settings.color,
+    strokeWidth: state.settings.size,
+    opacity: state.settings.opacity,
+  };
+}
+
+export function fillCircle(state: State, x: number, y: number, r: number): Update {
+  return {
+    type: "circle",
+    x, y, r,
+    fillColor: state.settings.color,
     strokeColor: state.settings.color,
     strokeWidth: state.settings.size,
     opacity: state.settings.opacity,

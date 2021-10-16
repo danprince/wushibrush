@@ -1,6 +1,10 @@
 import { Point } from "../../editor";
 import { Renderer } from "../../renderer";
 
+/**
+ * Helper for building tools that operate on a path of points. For example,
+ * brush strokes, erasers, etc.
+ */
 export class PathDrawingTool {
   private _points: Point[] = [];
   private _active = false;
@@ -31,7 +35,16 @@ export class PathDrawingTool {
     window.removeEventListener("pointermove", this.onPointerMove);
   }
 
+  private ignore(event: PointerEvent) {
+    return (
+      // Only interested in mouse left click.
+      event.pointerType === "mouse" && event.button !== 0
+    );
+  }
+
   private onPointerDown = (event: PointerEvent) => {
+    if (this.ignore(event)) return;
+
     if (!this._active) {
       let point = this.renderer.clientToCanvas(event.clientX, event.clientY);
       this._active = true;

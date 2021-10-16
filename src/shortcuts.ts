@@ -19,12 +19,12 @@ export function stop() {
   window.removeEventListener("keyup", handleKeyUp);
 }
 
-export function push() {
-  stack.push({ up: {}, down: {} });
+export function push(down: Bindings, up: Bindings = {}) {
+  stack.push({ up, down });
+  return () => pop();
 }
 
 export function pop() {
-  console.error("popped!");
   stack.pop();
 }
 
@@ -48,6 +48,11 @@ export function on(down: Bindings, up: Bindings = {}) {
 
 export function off() {
   pop();
+}
+
+
+interface ToggleBindings {
+  [keys: string]: (down: boolean) => any;
 }
 
 function getCurrentFrame() {
@@ -102,5 +107,26 @@ function handleKeyUp(event: KeyboardEvent) {
       return callback(event);
     }
   }
+}
+
+export function toggles(bindings: ToggleBindings) {
+  let up: Bindings = {};
+  let down: Bindings = {};
+
+  for (let key in bindings) {
+    down[key] = () => bindings[key](true);
+    up[key] = () => bindings[key](false);
+  }
+
+  return on(down, up);
+}
+
+export function preventDefault<Func extends Bindings[string]>(
+  func: Func,
+) {
+  return (event: KeyboardEvent) => {
+    event.preventDefault();
+    return func(event);
+  };
 }
 

@@ -1,10 +1,29 @@
 :root {
-  --shadow: 4px 4px rgba(0, 0, 0, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow: 4px 4px var(--shadow-color);
   --theme-color: #5551fd;
+  --panel-color: white;
+  --button-active-background: black;
+  --button-active-color: var(--theme-color);
+  --button-color: black;
+  --button-hover-background: var(--shadow-color);
+  --slider-thumb-background: black;
+  --slider-track-background: var(--shadow-color);
+}
+
+.quiet {
+  --panel-color: #4c48df;
+  --shadow-color: rgba(0, 0, 0, 0.2);
+  --button-active-background: white;
+  --button-active-color: var(--theme-color);
+  --button-color: white;
+  --slider-thumb-background: white;
+  --slider-track-background: var(--shadow-color);
 }
 
 .app {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: absolute;
@@ -15,11 +34,32 @@
   background-image: url(/background.svg);
 }
 
+.layout-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.layout-above,
+.layout-below,
+.layout-left,
+.layout-right {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  gap: 16px;
+}
+
+.layout-left, .layout-right {
+  flex-direction: column;
+  justify-content: center;
+}
+
 body {
   background: var(--theme-color);
   margin: 0;
   /* Disable pull-to-refresh */
   overscroll-behaviour: contain;
+  font-family: system-ui;
 }
 
 .renderer {
@@ -28,5 +68,11 @@ body {
   box-shadow: var(--shadow);
   overflow: hidden;
   touch-action: none;
+}
+
+@media (hover: none) {
+  .cursor {
+    display: none;
+  }
 }
 

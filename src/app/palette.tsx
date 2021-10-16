@@ -1,24 +1,11 @@
 import "./palette.css";
 
-const DEFAULT_COLORS = [
-  "black",
-  "#bbb",
-  "white",
-  "#ffd90f", // yellow
-  "#f1160a", // red
-  "#ff851b", // orange
-  "#48cb15", // green
-  "#519cfd", // blue
-  "#f9ddb9", // skin
-  "#f52eb5", // pink
-];
-
 export function Palette({
-  colors = DEFAULT_COLORS,
+  colors,
   activeColor,
   setColor,
 }: {
-  colors?: string[],
+  colors: string[],
   activeColor: string,
   setColor(color: string): void,
 }) {

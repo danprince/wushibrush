@@ -1,7 +1,7 @@
 .panel {
-  background: white;
+  display: flex;
   padding: 8px;
+  background: var(--panel-color);
   box-shadow: var(--shadow);
   border-radius: 8px;
-  display: flex;
 }

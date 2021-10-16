@@ -7,6 +7,10 @@ export const Left = (props: Props) => (
   <div className="region region-left" {...props} />
 );
 
+export const Center = (props: Props) => (
+  <div className="region region-center" {...props} />
+);
+
 export const Right = (props: Props) => (
   <div className="region region-right" {...props} />
 );

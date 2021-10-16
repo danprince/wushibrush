@@ -164,20 +164,30 @@ export class SvgRenderer implements Renderer {
     return null;
   }
 
-  async toFile() {
-    let root = h("svg", {
+  toSvg() {
+    let svg = h("svg", {
       width: this.width,
       height: this.height,
       xmlns: "http://www.w3.org/2000/svg",
       viewBox: `0 0 ${this.width} ${this.height}`,
     });
+    svg.innerHTML = this.viewGroup.innerHTML;
+    return svg;
+  }
 
-    root.innerHTML = this.viewGroup.innerHTML;
+  async toFile(name: string) {
+    let svg = this.toSvg();
 
-    let body = root.outerHTML;
+    return new File([svg.outerHTML], `${name}.svg`, {
+      type: "image/svg",
+    });
+  }
 
-    return new File([body], "download.svg", {
-      type: "image/svg+xml",
+  async toBlob() {
+    let svg = this.toSvg();
+
+    return new Blob([svg.outerHTML], {
+      type: "image/svg",
     });
   }
 }

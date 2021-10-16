@@ -1,6 +1,4 @@
 .region {
-  position: fixed;
-  pointer-events: none;
   padding: 8px;
   display: flex;
   gap: 8px;
@@ -8,6 +6,12 @@
 
 .region > * {
   pointer-events: auto;
+}
+
+.region-bottom {
+  width: 100%;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .region-left {
@@ -23,13 +27,6 @@
   top: 0;
   bottom: 0;
   flex-direction: column;
-  justify-content: center;
-}
-
-.region-top {
-  top: 0;
-  left: 100px;
-  right: 100px;
   justify-content: center;
 }
 

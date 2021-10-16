@@ -1,0 +1,37 @@
+.modal {
+  background-image: url("/background.svg");
+  background-size: 200px;
+}
+
+.help-header {
+  text-align: center;
+}
+
+.help-header h1 {
+  font-size: 20pt;
+}
+
+.help-shortcuts {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.help-shortcuts h2 {
+  font-size: 14pt;
+}
+
+.help-shortcuts ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.help kbd {
+  background: #f9f9f9;
+  box-shadow: 0 2px 0 #ddd;
+  border-radius: 2px;
+  padding: 2px 4px;
+  line-height: 1.8em;
+  font-family: monaco;
+}

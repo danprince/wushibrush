@@ -5,8 +5,8 @@ import * as Shortcuts from "../shortcuts";
 import * as Icons from "./icons";
 import * as Regions from "./regions";
 import { VNode } from "preact";
-import { useReducer, useMemo, useEffect } from "preact/hooks";
-import { SvgRenderer } from "../renderer/svg-renderer";
+import { useReducer, useMemo, useEffect, useLayoutEffect, useState } from "preact/hooks";
+import { CanvasRenderer as Renderer } from "../renderer/canvas-renderer";
 import { useEditor, useTool } from "../hooks";
 import { Palette } from "./palette";
 import { Panel } from "./panel";
@@ -14,10 +14,13 @@ import { Toolbar, ToolbarButton } from "./toolbar";
 import { BrushSelector } from "./brush-selector";
 import { OpacitySlider } from "./opacity-slider";
 import { Tool } from "../tools";
+import { Shortcut, BRUSH_SIZES, COLORS } from "./config";
+import { Modal } from "./modal";
+import { Help } from "./help";
 
 interface ToolOption {
   label: string;
-  shortcut: string;
+  shortcut: Shortcut;
   icon: VNode;
   handler: Tool;
 }
@@ -25,44 +28,44 @@ interface ToolOption {
 const tools: ToolOption[] = [
   {
     label: "Brush",
-    shortcut: "b",
+    shortcut: Shortcut.BrushTool,
     icon: <Icons.Brush />,
     handler: Tools.brush,
   },
   {
     label: "Eraser",
-    shortcut: "e",
+    shortcut: Shortcut.EraserTool,
     icon: <Icons.Eraser />,
     handler: Tools.eraser,
   },
   {
     label: "Rectangle",
-    shortcut: "r",
+    shortcut: Shortcut.RectangleTool,
     icon: <Icons.Rect />,
     handler: Tools.rect,
   },
   {
     label: "Circle",
-    shortcut: "c",
+    shortcut: Shortcut.CircleTool,
     icon: <Icons.Circle />,
     handler: Tools.circle,
   },
   {
     label: "Line",
-    shortcut: "l",
+    shortcut: Shortcut.LineTool,
     icon: <Icons.Line />,
     handler: Tools.line,
   },
   {
     label: "Eyedropper",
-    shortcut: "i",
+    shortcut: Shortcut.EyedropperTool,
     icon: <Icons.Eyedropper />,
     handler: Tools.eyedropper,
   },
 ];
 
 export function App() {
-  let renderer = useMemo(() => new SvgRenderer(200, 200), []);
+  let renderer = useMemo(() => new Renderer(500, 500), []);
 
   let [state, dispatch] = useEditor({ renderer });
 
@@ -73,95 +76,114 @@ export function App() {
     defaultTool: Tools.brush,
   });
 
+  let [helpVisible, setShowHelp] = useState(false);
+
   let undo = () => dispatch(Editor.undo());
   let redo = () => dispatch(Editor.redo());
   let setColor = (color: string) => dispatch(Editor.setColor(color));
   let setSize = (size: number) => dispatch(Editor.setPenSize(size));
   let setOpacity = (opacity: number) => dispatch(Editor.setOpacity(opacity));
-  let save = () => renderer.toFile().then(download);
-
-  useEffect(() => {
-    let toolShortcuts: Shortcuts.Bindings = {};
-
-    for (let tool of tools) {
-      toolShortcuts[tool.shortcut] = () => setTool(tool.handler);
-    }
-
-    return Shortcuts.on({
-      "ctrl+shift+z": redo,
-      "ctrl+z": undo,
-      "ctrl+s": event => {
-        event.preventDefault();
-        save();
-      },
-      ...toolShortcuts,
-    });
-  }, []);
+  let save = () => renderer.toFile("image").then(download);
+  let toggleQuietMode = () => document.body.classList.toggle("quiet");
+  let showHelp = () => setShowHelp(true);
 
   useEffect(() => {
     Shortcuts.start();
     return () => Shortcuts.stop();
   }, []);
 
+  // Important that these shortcuts are registered before any tool shortcuts
+  // so we use layout effect here.
+  useLayoutEffect(() => {
+    let bindings: Shortcuts.Bindings = {};
+
+    for (let tool of tools) {
+      bindings[tool.shortcut] = () => setTool(tool.handler);
+    }
+
+    for (let i = 0; i < BRUSH_SIZES.length; i++) {
+      bindings[i + 1] = () => setSize(BRUSH_SIZES[i]);
+    }
+
+    return Shortcuts.on({
+      ...bindings,
+      [Shortcut.Redo]: redo,
+      [Shortcut.Undo]: undo,
+      [Shortcut.Download]: Shortcuts.preventDefault(save),
+      [Shortcut.ShowHelp]: showHelp,
+      [Shortcut.ToggleQuietMode]: toggleQuietMode,
+    });
+  }, []);
+
   let activeTool = tool;
 
   return (
     <div class="app">
-      <div class="renderer" ref={renderer.mount} />
-      <Regions.Left>
-        <Panel>
-          <Palette
-            activeColor={state.settings.color}
-            setColor={setColor}
-          />
-        </Panel>
-      </Regions.Left>
-      <Regions.Right>
-        <Panel>
-          <Toolbar>
-            {tools.map(tool => {
-              return (
-                <ToolbarButton
-                  active={activeTool === tool.handler}
-                  onClick={() => setTool(tool.handler)}
-                  title={tool.label}
-                >
-                  {tool.icon}
-                </ToolbarButton>
-              );
-            })}
-            <ToolbarButton
-              onClick={undo}
-              disabled={!Editor.canUndo(state)}
-              title="Undo"
-            >
-              <Icons.Undo/>
-            </ToolbarButton>
-            <ToolbarButton
-              onClick={redo}
-              disabled={!Editor.canRedo(state)}
-              title="Redo"
-            >
-              <Icons.Redo/>
-            </ToolbarButton>
-            <a href="https://github.com/danprince/wushibrush" target="_blank">
-              <ToolbarButton title="GitHub">
-                <Icons.GitHub width={18} />
+      {helpVisible && (
+        <Modal onClose={() => setShowHelp(false)} closeKeys={Shortcut.ShowHelp}>
+          <Help />
+        </Modal>
+      )}
+
+      <main class="layout-row">
+        <div class="layout-left">
+          <Panel>
+            <Palette
+              colors={COLORS}
+              activeColor={state.settings.color}
+              setColor={setColor}
+            />
+          </Panel>
+        </div>
+        <div class="layout-center">
+          <div class="renderer" ref={renderer.mount} />
+        </div>
+        <div class="layout-right">
+          <Panel>
+            <Toolbar>
+              {tools.map(tool => {
+                return (
+                  <ToolbarButton
+                    active={activeTool === tool.handler}
+                    onClick={() => setTool(tool.handler)}
+                    title={tool.label}
+                  >
+                    {tool.icon}
+                  </ToolbarButton>
+                );
+              })}
+              <ToolbarButton
+                onClick={undo}
+                disabled={!Editor.canUndo(state)}
+                title="Undo"
+              >
+                <Icons.Undo/>
               </ToolbarButton>
-            </a>
-            <ToolbarButton
-              onClick={save}
-              disabled={!Editor.canSave(state)}
-              title="Download"
-            >
-              <Icons.Download/>
-            </ToolbarButton>
-          </Toolbar>
-        </Panel>
-      </Regions.Right>
-      <Regions.Bottom>
+              <ToolbarButton
+                onClick={redo}
+                disabled={!Editor.canRedo(state)}
+                title="Redo"
+              >
+                <Icons.Redo/>
+              </ToolbarButton>
+              <ToolbarButton title="Help" onClick={showHelp}>
+                <Icons.Help />
+              </ToolbarButton>
+              <ToolbarButton
+                onClick={save}
+                disabled={!Editor.canSave(state)}
+                title="Download"
+              >
+                <Icons.Download/>
+              </ToolbarButton>
+            </Toolbar>
+          </Panel>
+        </div>
+      </main>
+      <div class="layout-below">
         <Panel>
           <BrushSelector
+            sizes={BRUSH_SIZES}
             activeSize={state.settings.size}
             setSize={setSize}
           />
@@ -172,7 +194,7 @@ export function App() {
             setOpacity={setOpacity}
           />
         </Panel>
-      </Regions.Bottom>
+      </div>
     </div>
   );
 }
@@ -191,3 +213,4 @@ function download(file: File) {
     a.remove();
   });
 }
+

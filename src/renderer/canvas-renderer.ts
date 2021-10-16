@@ -33,10 +33,19 @@ export class CanvasRenderer implements Renderer {
     this.container.style.position = "relative";
     this.container.style.cursor = "none";
 
+    this.cursorCanvas.className = "cursor";
+
     for (let canvas of [this.canvas, this.previewCanvas, this.cursorCanvas]) {
       canvas.style.position = "absolute";
       canvas.style.width = "100%";
       canvas.style.height = "100%";
+
+      if (canvas !== this.canvas) {
+        // Make it possible to right click > copy the real canvas by disabling
+        // pointer events from the ones above it.
+        canvas.style.pointerEvents = "none";
+      }
+
       this.container.append(canvas);
     }
   }
@@ -101,36 +110,60 @@ export class CanvasRenderer implements Renderer {
     ctx.save();
 
     switch (update.type) {
+      case "clear": {
+        ctx.clearRect(0, 0, this.width, this.height);
+        break;
+      }
+
       case "path": {
         ctx.globalAlpha = update.opacity;
+        ctx.beginPath();
 
         if ("fillColor" in update) {
           ctx.fillStyle = update.fillColor;
           ctx.fill(new Path2D(update.path));
-        } else {
+        }
+
+        if ("strokeColor" in update) {
           ctx.strokeStyle = update.strokeColor;
           ctx.lineWidth = update.strokeWidth;
           ctx.lineCap = "round";
           ctx.lineJoin = "round";
           ctx.stroke(new Path2D(update.path));
         }
+
         break;
       }
 
       case "erase": {
-        ctx.globalCompositeOperation = "destination-out";
+        if (ctx === this.previewCtx) {
+          ctx.fillStyle = "white";
+        } else {
+          ctx.globalCompositeOperation = "destination-out";
+        }
+
         ctx.fill(new Path2D(update.path));
         break;
       }
 
       case "circle": {
         let { x, y, r } = update;
-        ctx.lineWidth = update.strokeWidth;
-        ctx.strokeStyle = update.strokeColor;
+
         ctx.globalAlpha = update.opacity;
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2, false);
-        ctx.stroke();
+
+        if ("fillColor" in update) {
+          ctx.fillStyle = update.fillColor;
+          ctx.fill();
+        }
+
+        if ("strokeColor" in update) {
+          ctx.lineWidth = update.strokeWidth;
+          ctx.strokeStyle = update.strokeColor;
+          ctx.stroke();
+        }
+
         break;
       }
     }

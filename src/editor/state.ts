@@ -36,10 +36,13 @@ interface StrokeWidth {
   strokeWidth: number;
 }
 
+type FillAndStroke<T> = T & Stroke | T & Fill | T & Stroke & Fill;
+
 export type Update =
+  | { type: "clear" }
   | { type: "erase", path: string } & StrokeWidth
-  | { type: "path", path: string } & (Fill | Stroke)
-  | { type: "circle", x: number, y: number, r: number } & Stroke
+  | FillAndStroke<{ type: "path", path: string }>
+  | FillAndStroke<{ type: "circle", x: number, y: number, r: number }>
 
 export type Action =
   | { type: "reset" }

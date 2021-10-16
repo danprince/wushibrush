@@ -33,6 +33,13 @@ export function useRenderer(
     };
   }, []);
 
+  // This effect has to run before any drawing effects, because a resize
+  // clears the canvas.
+  useEffect(() => {
+    let { width, height } = state.canvas;
+    renderer.resize(width, height);
+  }, [renderer, state.canvas]);
+
   useEffect(() => {
     // TODO: This is wasteful (rebuilding the whole image after each commit)
     // Think about a better way to restore from checkpoints instead of from
@@ -52,11 +59,6 @@ export function useRenderer(
   useEffect(() => {
     renderer.setCursorSize(state.settings.size);
   }, [renderer, state.settings]);
-
-  useEffect(() => {
-    let { width, height } = state.canvas;
-    renderer.resize(width, height);
-  }, [renderer, state.canvas]);
 }
 
 export function useEditor({

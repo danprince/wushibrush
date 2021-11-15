@@ -5,7 +5,7 @@
 </p>
 
 <h1 align="center">
-<a href="wushibrush.netlify.app" target="_blank">
+<a href="https://wushibrush.netlify.app" target="_blank">
 Wushibrush
 </a>
 </h1>
